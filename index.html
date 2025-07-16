@@ -1,0 +1,161 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="MindMatrix AI Academy offers AI and ML courses for beginners and programmers.">
+<meta name="keywords" content="AI education, machine learning courses, no-code AI, MindMatrix AI Academy">
+<title>MindMatrix AI Academy</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<script src="js/scripts.js" defer></script>
+</head>
+<body class="bg-gray-100 font-sans">
+<header class="bg-blue-800 text-white py-4">
+<div class="container mx-auto flex justify-between items-center px-4">
+<img src="images/logo.png" alt="MindMatrix AI Academy Logo" class="h-12">
+<nav class="space-x-4">
+<a href="index.html" class="hover:underline">Home</a>
+<a href="about.html" class="hover:underline">About Us</a>
+<a href="courses.html" class="hover:underline">Courses</a>
+<a href="corporate.html" class="hover:underline">Corporate Training</a>
+<a href="blog.html" class="hover:underline">Blog</a>
+<a href="contact.html" class="hover:underline">Contact Us</a>
+<a href="#" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600">Enroll Now</a>
+</nav>
+<form class="search-form flex" action="https://formspree.io/f/your-form-id" method="POST">
+<input type="text" name="search" placeholder="Search" class="px-2 py-1 rounded-l">
+<button type="submit" class="bg-yellow-500 px-4 py-1 rounded-r">Search</button>
+</form>
+</div>
+</header>
+<main class="container mx-auto py-8 px-4">
+<section class="text-center mb-12">
+<h1 class="text-4xl font-bold mb-4">Empowering Minds with AI & Machine Learning</h1>
+<p class="text-lg mb-6">Join MindMatrix AI Academy to master AI and ML, whether you're a beginner or a business leader. Start your journey today!</p>
+<div class="space-x-4">
+<a href="courses.html" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Explore Courses</a>
+<a href="contact.html" class="bg-yellow-500 text-black px-6 py-2 rounded hover:bg-yellow-600">Get in Touch</a>
+</div>
+</section>
+<section class="mb-12">
+<h2 class="text-3xl font-bold mb-6 text-center">Our Programs</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white p-6 rounded shadow">
+<h3 class="text-xl font-semibold mb-2">AI/ML for Non-Programmers</h3>
+<p>Boost your productivity with AI tools—no coding required. Perfect for professionals and beginners.</p>
+<a href="non_programmers.html" class="text-blue-600 hover:underline">Learn More</a>
+</div>
+<div class="bg-white p-6 rounded shadow">
+<h3 class="text-xl font-semibold mb-2">AI/ML Prototyping for Programmers</h3>
+<p>Build real-world AI models with Python, TensorFlow, and PyTorch. Ideal for coders ready to innovate.</p>
+<a href="prototyping.html" class="text-blue-600 hover:underline">Learn More</a>
+</div>
+<div class="bg-white p-6 rounded shadow">
+<h3 class="text-xl font-semibold mb-2">Corporate Training & AI Transformation</h3>
+<p>Custom AI workshops to empower your team or institution with cutting-edge solutions.</p>
+<a href="corporate.html" class="text-blue-600 hover:underline">Request a Quote</a>
+</div>
+</div>
+</section>
+<section class="mb-12">
+<h2 class="text-3xl font-bold mb-6 text-center">What Our Learners Say</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white p-6 rounded shadow">
+<p class="italic">"MindMatrix made AI practical and accessible for my team!"</p>
+<p class="mt-2 font-semibold">– Sarah J., Marketing Manager</p>
+</div>
+<div class="bg-white p-6 rounded shadow">
+<p class="italic">"The prototyping course helped me land a data science role!"</p>
+<p class="mt-2 font-semibold">– Rajesh K., Software Engineer</p>
+</div>
+</div>
+</section>
+<section class="text-center mb-12">
+<h2 class="text-3xl font-bold mb-4">Upcoming Events</h2>
+<p>Join our free webinar: “AI for Beginners” on August 1, 2025.</p>
+<a href="#" class="bg-yellow-500 text-black px-6 py-2 rounded hover:bg-yellow-600">Register Now</a>
+</section>
+</main>
+<footer class="bg-blue-800 text-white py-8">
+<div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+<div>
+<h3 class="text-xl font-bold mb-4">MindMatrix AI Academy</h3>
+<p>Empowering you with AI and ML education for innovation and growth.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4">Quick Links</h3>
+<ul class="space-y-2">
+<li><a href="index.html" class="hover:underline">Home</a></li>
+<li><a href="about.html" class="hover:underline">About Us</a></li>
+<li><a href="courses.html" class="hover:underline">Courses</a></li>
+<li><a href="corporate.html" class="hover:underline">Corporate Training</a></li>
+<li><a href="blog.html" class="hover:underline">Blog</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4">Stay Connected</h3>
+<p>Get the latest AI insights with our newsletter.</p>
+<form class="newsletter-form mt-4 flex" action="https://formspree.io/f/your-form-id" method="POST">
+<input type="email" name="email" placeholder="Enter your email" class="px-2 py-1 rounded-l w-full" required>
+<button type="submit" class="bg-yellow-500 text-black px-4 py-1 rounded-r">Subscribe</button>
+</form>
+<div class="mt-4 flex space-x-4">
+<a href="https://linkedin.com" class="hover:underline">LinkedIn</a>
+<a href="https://x.com" class="hover:underline">X</a>
+<a href="https://youtube.com" class="hover:underline">YouTube</a>
+<a href="https://instagram.com" class="hover:underline">Instagram</a>
+</div>
+</div>
+</div>
+<div class="container mx-auto px-4 mt-8KHTML
+
+System: 8 text-center">
+<p>© 2025 MindMatrix AI Academy. All rights reserved.</p>
+<div class="space-x-4">
+<a href="#" class="hover:underline">Privacy Policy</a>
+<a href="#" class="hover:underline">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body>
+</html>
