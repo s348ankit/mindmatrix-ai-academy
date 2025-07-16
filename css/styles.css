@@ -1,1 +1,39 @@
+/* Custom styles for MindMatrix AI Academy */
+body {
+  font-family: 'Inter', sans-serif;
+}
 
+/* Ensure header is sticky on mobile */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Smooth hover effects for buttons */
+button, a.bg-yellow-500, a.bg-blue-600 {
+  transition: background-color 0.3s ease;
+}
+
+/* Form styling */
+form input, form select, form textarea {
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+form input:focus, form select:focus, form textarea:focus {
+  border-color: #1d4ed8;
+  outline: none;
+}
+
+/* Responsive team images */
+img.rounded-full {
+  object-fit: cover;
+}
+
+/* Footer links */
+footer a {
+  transition: color 0.3s ease;
+}
+footer a:hover {
+  color: #facc15;
+}
